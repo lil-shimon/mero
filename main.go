@@ -44,7 +44,7 @@ func analyze(tokens string) {
 		fmt.Println(string(char))
 		switch char {
 		case ':':
-		if tokens[pos+1] == ':' {
+		if pos+1 < inputLen && tokens[pos+1] == ':' {
 				result = append(result, DOUBLE_COLON)
 				pos++
 			} else {
