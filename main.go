@@ -36,4 +36,9 @@ func main() {
 func analyze(tokens string) {
 	inputLen := len(tokens)
 	fmt.Println(inputLen)
+
+	for i := 0; i < inputLen; i++ {
+		char := tokens[i]
+		fmt.Println(string(char))
+	}
 }
