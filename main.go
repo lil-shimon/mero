@@ -57,6 +57,13 @@ func analyze(tokens string) {
 			} else {
 				result = append(result, ARROW)
 			}
+		case '-':
+			if pos+1 < inputLen && tokens[pos+1] == '>' {
+				result = append(result, RETURN_ARROW)
+				pos++
+		} else {
+				result = append(result, MINUS)
+			}
 		}
 		pos++
 	}
