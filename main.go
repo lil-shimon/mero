@@ -38,9 +38,18 @@ func analyze(tokens string) {
 	fmt.Println(inputLen)
 
 	pos := 0
+	var result []int
 	for pos < inputLen  {
 		char := tokens[pos]
 		fmt.Println(string(char))
+		switch char {
+		case ':':
+		if tokens[pos+1] == ':' {
+				result = append(result, DOUBLE_COLON)
+			} else {
+				result = append(result, COLON)
+			}
+		}
 		pos++
 	}
 }
