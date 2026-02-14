@@ -25,3 +25,11 @@ const (
 )
 
 // TODO: IDENTIFIERの場合、なんなのかを識別するロジック
+
+func main() {
+	tokens := ":: name > 'mero'"
+	analyze(tokens)
+}
+
+func analyze(tokens string) {}
+
