@@ -1,4 +1,4 @@
-package mero
+package main 
 
 const (
 	DOUBLE_COLON = iota
