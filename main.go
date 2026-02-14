@@ -1,4 +1,6 @@
-package main 
+package main
+
+import "fmt"
 
 const (
 	DOUBLE_COLON = iota
@@ -27,9 +29,11 @@ const (
 // TODO: IDENTIFIERの場合、なんなのかを識別するロジック
 
 func main() {
-	tokens := ":: name > 'mero'"
-	analyze(tokens)
+	inputs := ":: name > 'mero'"
+	analyze(inputs)
 }
 
-func analyze(tokens string) {}
-
+func analyze(tokens string) {
+	inputLen := len(tokens)
+	fmt.Println(inputLen)
+}
