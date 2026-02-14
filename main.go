@@ -46,6 +46,7 @@ func analyze(tokens string) {
 		case ':':
 		if tokens[pos+1] == ':' {
 				result = append(result, DOUBLE_COLON)
+				pos++
 			} else {
 				result = append(result, COLON)
 			}
