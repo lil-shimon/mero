@@ -39,16 +39,23 @@ func analyze(tokens string) {
 
 	pos := 0
 	var result []int
-	for pos < inputLen  {
+	for pos < inputLen {
 		char := tokens[pos]
 		fmt.Println(string(char))
 		switch char {
 		case ':':
-		if pos+1 < inputLen && tokens[pos+1] == ':' {
+			if pos+1 < inputLen && tokens[pos+1] == ':' {
 				result = append(result, DOUBLE_COLON)
 				pos++
 			} else {
 				result = append(result, COLON)
+			}
+		case '>':
+			if pos+1 < inputLen && tokens[pos+1] == '>' {
+				result = append(result, DOUBLE_ARROW)
+				pos++
+			} else {
+				result = append(result, ARROW)
 			}
 		}
 		pos++
