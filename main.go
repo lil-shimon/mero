@@ -173,6 +173,7 @@ func parse(tokens []Token) []Node {
 			pos++ // IDENTIFIER
 			name := tokens[pos].Value
 			pos++ // ARROW
+			pos++
 			kind := tokens[pos].Kind
 			if kind == IDENTIFIER {
 				var params []Node
