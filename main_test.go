@@ -411,3 +411,95 @@ func TestAnalyze_VariableAndPrint(t *testing.T) {
 		}
 	}
 }
+
+// Evaluator Tests
+
+func TestEval_VariableDeclaration(t *testing.T) {
+	nodes := []Node{
+		{Kind: NODE_VARIABLE_DECLARATION, Name: "name", Value: "mero"},
+	}
+	env := map[string]string{}
+	eval(nodes, env)
+
+	if env["name"] != "mero" {
+		t.Errorf("Expected env[\"name\"] = %q, got %q", "mero", env["name"])
+	}
+}
+
+func TestEval_MultipleVariables(t *testing.T) {
+	nodes := []Node{
+		{Kind: NODE_VARIABLE_DECLARATION, Name: "a", Value: "hello"},
+		{Kind: NODE_VARIABLE_DECLARATION, Name: "b", Value: "world"},
+	}
+	env := map[string]string{}
+	eval(nodes, env)
+
+	if env["a"] != "hello" {
+		t.Errorf("Expected env[\"a\"] = %q, got %q", "hello", env["a"])
+	}
+	if env["b"] != "world" {
+		t.Errorf("Expected env[\"b\"] = %q, got %q", "world", env["b"])
+	}
+}
+
+func TestAnalyze_IdentifierWithUnderscore(t *testing.T) {
+	input := "number_one"
+	tokens := analyze(input)
+
+	if len(tokens) != 1 {
+		t.Fatalf("Expected 1 token, got %d: %v", len(tokens), tokens)
+	}
+
+	if tokens[0].Kind != IDENTIFIER {
+		t.Errorf("Expected Kind IDENTIFIER (%d), got %d", IDENTIFIER, tokens[0].Kind)
+	}
+
+	if tokens[0].Value != "number_one" {
+		t.Errorf("Expected Value %q, got %q", "number_one", tokens[0].Value)
+	}
+}
+
+func TestAnalyze_EqualEqual(t *testing.T) {
+	input := "=="
+	tokens := analyze(input)
+
+	// Currently == produces two EQUAL tokens
+	// This test documents the current behavior
+	// TODO: may need DOUBLE_EQUAL token for comparison
+	if len(tokens) != 2 {
+		t.Fatalf("Expected 2 tokens, got %d: %v", len(tokens), tokens)
+	}
+
+	if tokens[0].Kind != EQUAL || tokens[1].Kind != EQUAL {
+		t.Errorf("Expected two EQUAL tokens, got %v", tokens)
+	}
+}
+
+func TestParse_VariableDeclarationWithNumber(t *testing.T) {
+	tokens := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "a"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: NUMBER, Value: "123"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_VARIABLE_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_VARIABLE_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "a" {
+		t.Errorf("Expected Name %q, got %q", "a", node.Name)
+	}
+
+	if node.Value != "123" {
+		t.Errorf("Expected Value %q, got %q", "123", node.Value)
+	}
+}
