@@ -141,6 +141,7 @@ func analyze(tokens string) []Token {
 				// 最後のループ分進んでいるので戻す
 				pos--
 			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
+				// NOTE: _始まりの変数は許可しない
 				start := pos
 
 				for pos < inputLen && (tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z' || tokens[pos] == '_') {
