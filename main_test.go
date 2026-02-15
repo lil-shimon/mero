@@ -463,15 +463,16 @@ func TestAnalyze_EqualEqual(t *testing.T) {
 	input := "=="
 	tokens := analyze(input)
 
-	// Currently == produces two EQUAL tokens
-	// This test documents the current behavior
-	// TODO: may need DOUBLE_EQUAL token for comparison
-	if len(tokens) != 2 {
-		t.Fatalf("Expected 2 tokens, got %d: %v", len(tokens), tokens)
+	if len(tokens) != 1 {
+		t.Fatalf("Expected 1 token (DOUBLE_EQUAL), got %d: %v", len(tokens), tokens)
 	}
 
-	if tokens[0].Kind != EQUAL || tokens[1].Kind != EQUAL {
-		t.Errorf("Expected two EQUAL tokens, got %v", tokens)
+	if tokens[0].Kind != DOUBLE_EQUAL {
+		t.Errorf("Expected DOUBLE_EQUAL (%d), got %d", DOUBLE_EQUAL, tokens[0].Kind)
+	}
+
+	if tokens[0].Value != "==" {
+		t.Errorf("Expected Value %q, got %q", "==", tokens[0].Value)
 	}
 }
 

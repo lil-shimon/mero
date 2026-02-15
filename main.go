@@ -10,6 +10,8 @@ const (
 	COLON
 	DOUBLE_ARROW
 	ARROW
+	DOUBLE_EQUAL
+	EQUAL
 	MINUS
 	RETURN_ARROW
 	AT
@@ -23,7 +25,6 @@ const (
 	RBRACE
 	IDENTIFIER
 	DOT
-	EQUAL
 	STRING
 	NUMBER
 	FN
@@ -118,7 +119,12 @@ func analyze(tokens string) []Token {
 			result = append(result, Token{Kind: RBRACE, Value: "}"})
 		case ' ':
 		case '=':
+			if pos+1 < inputLen && tokens[pos+1] == '=' {
+				result = append(result, Token{Kind: DOUBLE_EQUAL, Value: "=="})
+				pos++
+			} else {
 			result = append(result, Token{Kind: EQUAL, Value: "="})
+			}
 		case '@':
 			result = append(result, Token{Kind: AT, Value: "@"})
 		default:
