@@ -149,7 +149,15 @@ func parse (tokens []Token) {
 		token := tokens[pos]
 		switch token.Kind {
 		case DOUBLE_COLON:
-				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: "::"})
+				pos++ // SPACE
+				pos++ // IDENTIFIER
+			  name := tokens[pos].Value
+				pos++ // SPACE
+				pos++ // ARROW 
+				pos++ // SPACE
+				pos++ // STRING or NUMBER 
+				value := tokens[pos].Value
+				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: name, Value: value})
 		}
 
 		pos++
