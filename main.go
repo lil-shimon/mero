@@ -173,8 +173,8 @@ type Node struct {
 const (
 	NODE_VARIABLE_DECLARATION = "VariableDeclaration"
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
-	NODE_RETURN_STATEMENT = "ReturnStatement"
-	NODE_PRINT = "Print"
+	NODE_RETURN_STATEMENT     = "ReturnStatement"
+	NODE_PRINT                = "Print"
 )
 
 func parse(tokens []Token) []Node {
@@ -201,7 +201,7 @@ func parse(tokens []Token) []Node {
 			case IDENTIFIER:
 				params := parseParams(tokens, &pos)
 
-				var body [] Node
+				var body []Node
 
 				if pos+1 < len(tokens) && tokens[pos+1].Kind == RETURN_ARROW {
 					pos++ // ARROW
@@ -212,16 +212,16 @@ func parse(tokens []Token) []Node {
 
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name, Body: body})
 			case RETURN_ARROW:
-				var body [] Node
+				var body []Node
 
-	 			pos++ // RETURN_ARROW
+				pos++ // RETURN_ARROW
 				for tokens[pos].Kind != ARROW {
 					bodyValue := tokens[pos].Value
 					body = append(body, Node{Value: bodyValue})
 					pos++
 				}
-				
-				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
+
+				result = append(result, Node{Kind: NODE_RETURN_STATEMENT, Body: body})
 			}
 		case PRINT:
 			pos++ // @
@@ -265,12 +265,12 @@ func eval(nodes []Node, env map[string]string) {
 			env[node.Name] = node.Value
 		case NODE_PRINT:
 			val, ok := env[node.Value]
-		if !ok {
+			if !ok {
 				fmt.Printf("Error: undefined variable '%s'\n", node.Value)
 				return
 			}
 
-		fmt.Print(val)
+			fmt.Print(val)
 		}
 	}
 }
