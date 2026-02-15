@@ -44,10 +44,21 @@ var keywords = map[string]int{
 }
 
 func main() {
-	inputs := ":: name > 'mero'"
 	args := os.Args
 	fmt.Print(args)
 
+	if len(args) < 2 {
+		fmt.Println("Usage: mero <file.mero>")
+		return
+	}
+
+	content, err := os.ReadFile(args[1])
+	if err != nil {
+		fmt.Print("Error: ", err)
+		return
+	}
+
+	inputs := string(content)
 	tokens := analyze(inputs)
 	parse(tokens)
 }
