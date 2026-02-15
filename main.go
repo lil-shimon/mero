@@ -179,6 +179,7 @@ func parse(tokens []Token) []Node {
 				var params []Node
 				param_name := tokens[pos].Value
 				pos++ // COLON
+				pos++
 				param_type := tokens[pos].Value
 				params = append(params, Node{Name: param_name, Value: param_type})
 				result = append(result, Node{Params: params, Name: name})
