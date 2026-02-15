@@ -176,12 +176,7 @@ func parse(tokens []Token) []Node {
 			pos++
 			kind := tokens[pos].Kind
 			if kind == IDENTIFIER {
-				var params []Node
-				param_name := tokens[pos].Value
-				pos++ // COLON
-				pos++
-				param_type := tokens[pos].Value
-				params = append(params, Node{Name: param_name, Value: param_type})
+				params := parseParams(tokens, &pos)
 				result = append(result, Node{Params: params, Name: name})
 			} else if kind == RETURN_ARROW {
 				// TODO:
@@ -193,4 +188,16 @@ func parse(tokens []Token) []Node {
 
 	fmt.Println("parse result", result)
 	return result
+}
+
+func parseParams(tokens []Token, pos *int) []Node {
+	var params []Node
+	param_name := tokens[*pos].Value
+	*pos++ // COLON
+	*pos++
+	param_type := tokens[*pos].Value
+	params = append(params, Node{Name: param_name, Value: param_type})
+
+	return params
+
 }
