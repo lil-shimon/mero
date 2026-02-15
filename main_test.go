@@ -276,6 +276,9 @@ func TestParse_FunctionDeclaration_MultipleParams(t *testing.T) {
 }
 
 func TestParse_FunctionDeclaration_WithReturnArrow(t *testing.T) {
+	// fn double > x : number >
+	//     -> x
+	// >
 	tokens := []Token{
 		{Kind: FN, Value: "fn"},
 		{Kind: IDENTIFIER, Value: "double"},
@@ -286,6 +289,7 @@ func TestParse_FunctionDeclaration_WithReturnArrow(t *testing.T) {
 		{Kind: ARROW, Value: ">"},
 		{Kind: RETURN_ARROW, Value: "->"},
 		{Kind: IDENTIFIER, Value: "x"},
+		{Kind: ARROW, Value: ">"},
 	}
 
 	nodes := parse(tokens)
@@ -316,7 +320,15 @@ func TestParse_FunctionDeclaration_WithReturnArrow(t *testing.T) {
 		t.Errorf("Expected Param[0].Value %q, got %q", "number", node.Params[0].Value)
 	}
 
-	if len(node.Body) < 1 {
-		t.Errorf("Expected Body to have at least 1 node, got %d", len(node.Body))
+	if len(node.Body) != 1 {
+		t.Fatalf("Expected 1 body node, got %d", len(node.Body))
+	}
+
+	if node.Body[0].Kind != NODE_RETURN_STATEMENT {
+		t.Errorf("Expected Body[0].Kind %q, got %q", NODE_RETURN_STATEMENT, node.Body[0].Kind)
+	}
+
+	if node.Body[0].Value != "x" {
+		t.Errorf("Expected Body[0].Value %q, got %q", "x", node.Body[0].Value)
 	}
 }
