@@ -137,7 +137,8 @@ type Node struct {
 }
 
 const (
-	NODE_VARIABLE_DECLAZRATION = "VariableDeclaration"
+	NODE_VARIABLE_DECLARATION = "VariableDeclaration"
+	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
 )
 
 func parse (tokens []Token) []Node {
@@ -153,7 +154,7 @@ func parse (tokens []Token) []Node {
 				pos++ // ARROW 
 				pos++ // STRING or NUMBER 
 				value := tokens[pos].Value
-				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: name, Value: value})
+				result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
 		}
 
 		pos++
