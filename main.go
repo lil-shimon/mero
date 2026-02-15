@@ -156,7 +156,6 @@ func analyze(tokens string) []Token {
 		}
 		pos++
 	}
-	fmt.Println(result)
 	return result
 }
 
@@ -234,7 +233,6 @@ func parse(tokens []Token) []Node {
 		pos++
 	}
 
-	fmt.Println("parse result", result)
 	return result
 }
 
