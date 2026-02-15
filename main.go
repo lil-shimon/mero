@@ -127,9 +127,9 @@ func analyze(tokens string) []Token {
 
 				if kind, ok := keywords[value]; ok {
 					result = append(result, Token{Kind: kind, Value: value})
+				} else {
+					result = append(result, Token{Kind: IDENTIFIER, Value: tokens[start:pos]})
 				}
-
-				result = append(result, Token{Kind: IDENTIFIER, Value: tokens[start:pos]})
 				pos--
 			}
 		}
@@ -169,6 +169,21 @@ func parse(tokens []Token) []Node {
 			pos++ // STRING or NUMBER
 			value := tokens[pos].Value
 			result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
+		case FN:
+			pos++ // IDENTIFIER
+			name := tokens[pos].Value
+			pos++ // ARROW
+			kind := tokens[pos].Kind
+			if kind == IDENTIFIER {
+				var params []Node
+				param_name := tokens[pos].Value
+				pos++ // COLON
+				param_type := tokens[pos].Value
+				params = append(params, Node{Name: param_name, Value: param_type})
+				result = append(result, Node{Params: params, Name: name})
+			} else if kind == RETURN_ARROW {
+				// TODO:
+			}
 		}
 
 		pos++
