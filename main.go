@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 const (
 	DOUBLE_COLON = iota
@@ -42,6 +45,9 @@ var keywords = map[string]int{
 
 func main() {
 	inputs := ":: name > 'mero'"
+	args := os.Args
+	fmt.Print(args)
+
 	tokens := analyze(inputs)
 	parse(tokens)
 }
