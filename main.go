@@ -179,20 +179,17 @@ func parse(tokens []Token) []Node {
 			switch kind {
 			case IDENTIFIER:
 				params := parseParams(tokens, &pos)
-				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
-			// TODO: RETURN ARROW case with params
+
 				var body [] Node
 
-	 			pos++ // RETURN_ARROW
-				for tokens[pos].Kind != ARROW {
-					bodyValue := tokens[pos].Value
-					body = append(body, Node{Value: bodyValue})
-					pos++
+				if pos+1 < len(tokens) && tokens[pos+1].Kind == RETURN_ARROW {
+					pos++ // ARROW
+					pos++ // RETURN_ARROW
+
+					body = append(body, Node{Value: tokens[pos].Value})
 				}
-				
-				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
 
-
+				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name, Body: body})
 			case RETURN_ARROW:
 				var body [] Node
 
