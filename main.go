@@ -187,6 +187,7 @@ func parse(tokens []Token) []Node {
 				for tokens[pos].Kind != ARROW {
 					bodyValue := tokens[pos].Value
 					body = append(body, Node{Value: bodyValue})
+					pos++
 				}
 				
 				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
