@@ -153,6 +153,7 @@ type Node struct {
 const (
 	NODE_VARIABLE_DECLARATION = "VariableDeclaration"
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
+	NODE_RETURN_STATEMENT = "ReturnStatement"
 )
 
 func parse(tokens []Token) []Node {
@@ -180,6 +181,15 @@ func parse(tokens []Token) []Node {
 				params := parseParams(tokens, &pos)
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
 			case RETURN_ARROW:
+				var body [] Node
+
+	 			pos++ // RETURN_ARROW
+				for tokens[pos].Kind != ARROW {
+					bodyValue := tokens[pos].Value
+					body = append(body, Node{Value: bodyValue})
+				}
+				
+				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
 			}
 		}
 
