@@ -64,7 +64,29 @@ func analyze(tokens string) {
 			} else {
 				result = append(result, MINUS)
 			}
+		case '.':
+			result = append(result, DOT)
+		case '+':
+			result = append(result, PLUS)
+		case '*':
+			result = append(result, ASTERISK)
+		case '/':
+			result = append(result, SLASH)
+		case ',':
+			result = append(result, COMMA)
+			pos++
+		case '[':
+			result = append(result, LBRACKET)
+		case ']':
+			result = append(result, RBRACKET)
+		case '{':
+			result = append(result, LBRACE)
+		case '}':
+			result = append(result, RBRACE)
+		case ' ':
+			result = append(result, SPACE)
+		case '=':
+			result = append(result, EQUAL)
 		}
-		pos++
 	}
 }
