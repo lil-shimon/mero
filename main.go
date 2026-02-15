@@ -111,7 +111,7 @@ func analyze(tokens string) {
 			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
 				start := pos
 
-				for pos < inputLen && tokens[pos] >= '0' && tokens[pos] <= '9' {
+				for pos < inputLen && tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z' {
 					pos++
 				}
 				result = append(result, Token{Kind: IDENTIFIER, Value: tokens[start:pos]})
