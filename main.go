@@ -175,11 +175,11 @@ func parse(tokens []Token) []Node {
 			pos++ // ARROW
 			pos++
 			kind := tokens[pos].Kind
-			if kind == IDENTIFIER {
+			switch kind {
+			case IDENTIFIER:
 				params := parseParams(tokens, &pos)
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
-			} else if kind == RETURN_ARROW {
-				// TODO:
+			case RETURN_ARROW:
 			}
 		}
 
