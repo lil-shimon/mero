@@ -30,6 +30,7 @@ const (
 	IF
 	ELSE
 	TYPE
+	PRINT
 )
 
 type Token struct {
