@@ -26,6 +26,11 @@ const (
 	NUMBER
 )
 
+type Token struct {
+	Kind int
+	Value string
+}
+
 // TODO: IDENTIFIERの場合、なんなのかを識別するロジック
 
 func main() {
@@ -74,7 +79,6 @@ func analyze(tokens string) {
 			result = append(result, SLASH)
 		case ',':
 			result = append(result, COMMA)
-			pos++
 		case '[':
 			result = append(result, LBRACKET)
 		case ']':
@@ -88,5 +92,6 @@ func analyze(tokens string) {
 		case '=':
 			result = append(result, EQUAL)
 		}
+		pos++
 	}
 }
