@@ -31,7 +31,7 @@ type Token struct {
 	Value string
 }
 
-// TODO: IDENTIFIERの場合、なんなのかを識別するロジック
+// TODO: IDENTIFIERの場合、なんなのかを識別するロジック(e.g. if, type)
 
 func main() {
 	inputs := ":: name > 'mero'"
