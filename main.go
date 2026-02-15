@@ -185,6 +185,7 @@ const (
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
 	NODE_RETURN_STATEMENT     = "ReturnStatement"
 	NODE_PRINT                = "Print"
+	NODE_FUNCTION_CALL = "FunctionCall"
 )
 
 func parse(tokens []Token) []Node {

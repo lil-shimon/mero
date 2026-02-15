@@ -504,3 +504,101 @@ func TestParse_VariableDeclarationWithNumber(t *testing.T) {
 		t.Errorf("Expected Value %q, got %q", "123", node.Value)
 	}
 }
+
+// Lexer: sum@a, b のトークン化
+func TestAnalyze_FunctionCall(t *testing.T) {
+	input := "sum@a, b"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "a"},
+		{Kind: COMMA, Value: ","},
+		{Kind: IDENTIFIER, Value: "b"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d: %v", len(expected), len(tokens), tokens)
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}
+
+// Parser: sum@a, b のパース
+func TestParse_FunctionCall(t *testing.T) {
+	// sum@a, b
+	tokens := []Token{
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "a"},
+		{Kind: COMMA, Value: ","},
+		{Kind: IDENTIFIER, Value: "b"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_FUNCTION_CALL {
+		t.Errorf("Expected Kind %q, got %q", NODE_FUNCTION_CALL, node.Kind)
+	}
+
+	if node.Name != "sum" {
+		t.Errorf("Expected Name %q, got %q", "sum", node.Name)
+	}
+
+	if len(node.Params) != 2 {
+		t.Fatalf("Expected 2 arguments, got %d", len(node.Params))
+	}
+
+	if node.Params[0].Value != "a" {
+		t.Errorf("Expected Params[0].Value %q, got %q", "a", node.Params[0].Value)
+	}
+
+	if node.Params[1].Value != "b" {
+		t.Errorf("Expected Params[1].Value %q, got %q", "b", node.Params[1].Value)
+	}
+}
+
+// Parser: 変数宣言で関数呼び出しの結果を代入
+func TestParse_VariableWithFunctionCall(t *testing.T) {
+	// :: result > sum@a, b
+	tokens := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "result"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "a"},
+		{Kind: COMMA, Value: ","},
+		{Kind: IDENTIFIER, Value: "b"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_VARIABLE_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_VARIABLE_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "result" {
+		t.Errorf("Expected Name %q, got %q", "result", node.Name)
+	}
+}
