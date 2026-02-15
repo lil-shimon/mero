@@ -38,6 +38,7 @@ func main() {
 	analyze(inputs)
 }
 
+// Lexer
 func analyze(tokens string) {
 	inputLen := len(tokens)
 	pos := 0
