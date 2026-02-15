@@ -141,7 +141,7 @@ const (
 	NODE_VARIABLE_DECLAZRATION = "VariableDeclaration"
 )
 
-func parse (tokens []Token) {
+func parse (tokens []Token) []Node {
 	var result []Node
 	pos := 0
 
@@ -162,4 +162,6 @@ func parse (tokens []Token) {
 
 		pos++
 	}
+
+	return result
 }
