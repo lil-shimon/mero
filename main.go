@@ -24,6 +24,10 @@ const (
 	EQUAL
 	STRING
 	NUMBER
+	FN
+	IF
+	ELSE
+	TYPE
 )
 
 type Token struct {
@@ -32,6 +36,10 @@ type Token struct {
 }
 
 // TODO: IDENTIFIERの場合、なんなのかを識別するロジック(e.g. if, type)
+
+var keywords = map[string]int{
+	"fn": FN,
+}
 
 func main() {
 	inputs := ":: name > 'mero'"
@@ -115,6 +123,13 @@ func analyze(tokens string) []Token {
 				for pos < inputLen && tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z' {
 					pos++
 				}
+
+				value := tokens[start:pos]
+
+				if kind, ok := keywords[value]; ok {
+					result = append(result, Token{Kind: kind, Value: value})
+				}
+
 				result = append(result, Token{Kind: IDENTIFIER, Value: tokens[start:pos]})
 				pos--
 			}
@@ -129,11 +144,11 @@ func analyze(tokens string) []Token {
 
 // AST Node
 type Node struct {
-	Kind string
-	Name string
-	Value string
+	Kind   string
+	Name   string
+	Value  string
 	Params []Node
-	Body []Node
+	Body   []Node
 }
 
 const (
@@ -141,7 +156,7 @@ const (
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
 )
 
-func parse (tokens []Token) []Node {
+func parse(tokens []Token) []Node {
 	var result []Node
 	pos := 0
 
@@ -149,12 +164,12 @@ func parse (tokens []Token) []Node {
 		token := tokens[pos]
 		switch token.Kind {
 		case DOUBLE_COLON:
-				pos++ // IDENTIFIER
-			  name := tokens[pos].Value
-				pos++ // ARROW 
-				pos++ // STRING or NUMBER 
-				value := tokens[pos].Value
-				result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
+			pos++ // IDENTIFIER
+			name := tokens[pos].Value
+			pos++ // ARROW
+			pos++ // STRING or NUMBER
+			value := tokens[pos].Value
+			result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
 		}
 
 		pos++
