@@ -181,6 +181,18 @@ func parse(tokens []Token) []Node {
 				params := parseParams(tokens, &pos)
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
 			// TODO: RETURN ARROW case with params
+				var body [] Node
+
+	 			pos++ // RETURN_ARROW
+				for tokens[pos].Kind != ARROW {
+					bodyValue := tokens[pos].Value
+					body = append(body, Node{Value: bodyValue})
+					pos++
+				}
+				
+				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
+
+
 			case RETURN_ARROW:
 				var body [] Node
 
