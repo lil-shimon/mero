@@ -180,6 +180,7 @@ func parse(tokens []Token) []Node {
 			case IDENTIFIER:
 				params := parseParams(tokens, &pos)
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
+			// TODO: RETURN ARROW case with params
 			case RETURN_ARROW:
 				var body [] Node
 
