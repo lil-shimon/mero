@@ -90,15 +90,31 @@ func analyze(tokens string) {
 		case '=':
 			result = append(result, Token{Kind: EQUAL, Value: "="})
 		default:
-			if char >= '0' && char <= '9' {
+			if char == '\'' {
+				start := pos
+
+				for pos < inputLen && tokens[pos] == '\'' {
+					pos++
+				}
+				result = append(result, Token{Kind: STRING, Value: tokens[start:pos]})
+
+				// 最後のループ分進んでいるので戻す
+				pos--
+			} else if char >= '0' && char <= '9' {
 				start := pos
 
 				for pos < inputLen && tokens[pos] >= '0' && tokens[pos] <= '9' {
 					pos++
 				}
 				result = append(result, Token{Kind: NUMBER, Value: tokens[start:pos]})
+				pos--
+			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
+				start := pos
 
-				// 最後のループ分進んでいるので戻す
+				for pos < inputLen && tokens[pos] >= '0' && tokens[pos] <= '9' {
+					pos++
+				}
+				result = append(result, Token{Kind: IDENTIFIER, Value: tokens[start:pos]})
 				pos--
 			}
 		}
