@@ -59,7 +59,11 @@ func main() {
 
 	inputs := string(content)
 	tokens := analyze(inputs)
-	parse(tokens)
+	nodes := parse(tokens)
+
+	env := map[string]string{}
+
+	eval(nodes, env)
 }
 
 // Lexer
@@ -245,4 +249,15 @@ func parseParams(tokens []Token, pos *int) []Node {
 	}
 
 	return params
+}
+
+// Evaluate
+
+func eval(nodes []Node, env map[string]string) {
+	for _, node := range nodes {
+		switch node.Kind {
+		case NODE_VARIABLE_DECLARATION:
+			env[node.Name] = node.Value
+		}
+	}
 }
