@@ -40,15 +40,11 @@ func main() {
 
 func analyze(tokens string) {
 	inputLen := len(tokens)
-	fmt.Println(inputLen)
-
 	pos := 0
 	var result []Token
+
 	for pos < inputLen {
 		char := tokens[pos]
-
-		fmt.Println(string(char))
-
 		switch char {
 		case ':':
 			if pos+1 < inputLen && tokens[pos+1] == ':' {
