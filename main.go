@@ -186,7 +186,7 @@ func parse(tokens []Token) []Node {
 					pos++ // ARROW
 					pos++ // RETURN_ARROW
 
-					body = append(body, Node{Value: tokens[pos].Value})
+					body = append(body, Node{Kind: NODE_RETURN_STATEMENT, Value: tokens[pos].Value})
 				}
 
 				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name, Body: body})
