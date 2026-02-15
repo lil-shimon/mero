@@ -45,7 +45,6 @@ var keywords = map[string]int{
 
 func main() {
 	args := os.Args
-	fmt.Print(args)
 
 	if len(args) < 2 {
 		fmt.Println("Usage: mero <file.mero>")
