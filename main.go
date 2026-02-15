@@ -27,7 +27,7 @@ const (
 )
 
 type Token struct {
-	Kind int
+	Kind  int
 	Value string
 }
 
@@ -91,6 +91,8 @@ func analyze(tokens string) {
 			result = append(result, Token{Kind: EQUAL, Value: "="})
 		default:
 			if char == '\'' {
+				// 開始の'/'をスキップ
+				pos++
 				start := pos
 
 				for pos < inputLen && tokens[pos] != '\'' {
