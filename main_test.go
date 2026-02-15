@@ -1,0 +1,184 @@
+package main
+
+import (
+	"testing"
+)
+
+// Lexer Tests
+
+func TestAnalyze_VariableDeclaration(t *testing.T) {
+	input := ":: name > 'mero'"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "name"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: STRING, Value: "mero"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d", len(expected), len(tokens))
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}
+
+func TestAnalyze_FunctionSignature(t *testing.T) {
+	input := "fn sum > x : number >"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: FN, Value: "fn"},
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: IDENTIFIER, Value: "x"},
+		{Kind: COLON, Value: ":"},
+		{Kind: IDENTIFIER, Value: "number"},
+		{Kind: ARROW, Value: ">"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d", len(expected), len(tokens))
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}
+
+func TestAnalyze_DoubleArrow(t *testing.T) {
+	input := ">>"
+	tokens := analyze(input)
+
+	if len(tokens) != 1 {
+		t.Fatalf("Expected 1 token (DOUBLE_ARROW), got %d", len(tokens))
+	}
+
+	if tokens[0].Kind != DOUBLE_ARROW {
+		t.Errorf("Expected DOUBLE_ARROW (%d), got %d", DOUBLE_ARROW, tokens[0].Kind)
+	}
+
+	if tokens[0].Value != ">>" {
+		t.Errorf("Expected Value '>>', got %q", tokens[0].Value)
+	}
+}
+
+func TestAnalyze_ReturnArrow(t *testing.T) {
+	input := "->"
+	tokens := analyze(input)
+
+	if len(tokens) != 1 {
+		t.Fatalf("Expected 1 token (RETURN_ARROW), got %d", len(tokens))
+	}
+
+	if tokens[0].Kind != RETURN_ARROW {
+		t.Errorf("Expected RETURN_ARROW (%d), got %d", RETURN_ARROW, tokens[0].Kind)
+	}
+
+	if tokens[0].Value != "->" {
+		t.Errorf("Expected Value '->', got %q", tokens[0].Value)
+	}
+}
+
+func TestAnalyze_NumberLiteral(t *testing.T) {
+	input := ":: a > 123"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "a"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: NUMBER, Value: "123"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d", len(expected), len(tokens))
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}
+
+func TestAnalyze_SingleCharacterTokens(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected Token
+	}{
+		{"+", Token{Kind: PLUS, Value: "+"}},
+		{"-", Token{Kind: MINUS, Value: "-"}},
+		{"*", Token{Kind: ASTERISK, Value: "*"}},
+		{"/", Token{Kind: SLASH, Value: "/"}},
+		{",", Token{Kind: COMMA, Value: ","}},
+		{".", Token{Kind: DOT, Value: "."}},
+		{"[", Token{Kind: LBRACKET, Value: "["}},
+		{"]", Token{Kind: RBRACKET, Value: "]"}},
+		{"{", Token{Kind: LBRACE, Value: "{"}},
+		{"}", Token{Kind: RBRACE, Value: "}"}},
+	}
+
+	for _, tt := range tests {
+		tokens := analyze(tt.input)
+
+		if len(tokens) != 1 {
+			t.Fatalf("Input %q: expected 1 token, got %d", tt.input, len(tokens))
+		}
+
+		if tokens[0].Kind != tt.expected.Kind {
+			t.Errorf("Input %q: expected Kind %d, got %d", tt.input, tt.expected.Kind, tokens[0].Kind)
+		}
+
+		if tokens[0].Value != tt.expected.Value {
+			t.Errorf("Input %q: expected Value %q, got %q", tt.input, tt.expected.Value, tokens[0].Value)
+		}
+	}
+}
+
+// Parser Tests
+
+func TestParse_VariableDeclaration(t *testing.T) {
+	tokens := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "name"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: STRING, Value: "mero"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_VARIABLE_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_VARIABLE_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "name" {
+		t.Errorf("Expected Name %q, got %q", "name", node.Name)
+	}
+
+	if node.Value != "mero" {
+		t.Errorf("Expected Value %q, got %q", "mero", node.Value)
+	}
+}
