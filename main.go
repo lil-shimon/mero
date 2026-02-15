@@ -175,6 +175,7 @@ const (
 	NODE_VARIABLE_DECLARATION = "VariableDeclaration"
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
 	NODE_RETURN_STATEMENT = "ReturnStatement"
+	NODE_PRINT = "Print"
 )
 
 func parse(tokens []Token) []Node {
@@ -223,6 +224,11 @@ func parse(tokens []Token) []Node {
 				
 				result = append(result, Node{ Kind: NODE_RETURN_STATEMENT, Body: body})
 			}
+		case PRINT:
+			pos++ // @
+			pos++ // IDENTIFIER
+			value := tokens[pos].Value
+			result = append(result, Node{Kind: NODE_PRINT, Value: value})
 		}
 
 		pos++
