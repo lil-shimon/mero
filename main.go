@@ -43,54 +43,56 @@ func analyze(tokens string) {
 	fmt.Println(inputLen)
 
 	pos := 0
-	var result []int
+	var result []Token
 	for pos < inputLen {
 		char := tokens[pos]
+
 		fmt.Println(string(char))
+
 		switch char {
 		case ':':
 			if pos+1 < inputLen && tokens[pos+1] == ':' {
-				result = append(result, DOUBLE_COLON)
+				result = append(result, Token{Kind: DOUBLE_COLON, Value: "::"})
 				pos++
 			} else {
-				result = append(result, COLON)
+				result = append(result, Token{Kind: COLON, Value: ":"})
 			}
 		case '>':
 			if pos+1 < inputLen && tokens[pos+1] == '>' {
-				result = append(result, DOUBLE_ARROW)
+				result = append(result, Token{Kind: DOUBLE_ARROW, Value: ">>"})
 				pos++
 			} else {
-				result = append(result, ARROW)
+				result = append(result, Token{Kind: ARROW, Value: ">"})
 			}
 		case '-':
 			if pos+1 < inputLen && tokens[pos+1] == '>' {
-				result = append(result, RETURN_ARROW)
+				result = append(result, Token{Kind: RETURN_ARROW, Value: "->"})
 				pos++
 			} else {
-				result = append(result, MINUS)
+				result = append(result, Token{Kind: MINUS, Value: "-"})
 			}
 		case '.':
-			result = append(result, DOT)
+			result = append(result, Token{Kind: DOT, Value: "."})
 		case '+':
-			result = append(result, PLUS)
+			result = append(result, Token{Kind: PLUS, Value: "+"})
 		case '*':
-			result = append(result, ASTERISK)
+			result = append(result, Token{Kind: ASTERISK, Value: "*"})
 		case '/':
-			result = append(result, SLASH)
+			result = append(result, Token{Kind: SLASH, Value: "/"})
 		case ',':
-			result = append(result, COMMA)
+			result = append(result, Token{Kind: COMMA, Value: ","})
 		case '[':
-			result = append(result, LBRACKET)
+			result = append(result, Token{Kind: LBRACKET, Value: "["})
 		case ']':
-			result = append(result, RBRACKET)
+			result = append(result, Token{Kind: RBRACKET, Value: "]"})
 		case '{':
-			result = append(result, LBRACE)
+			result = append(result, Token{Kind: LBRACE, Value: "{"})
 		case '}':
-			result = append(result, RBRACE)
+			result = append(result, Token{Kind: RBRACE, Value: "}"})
 		case ' ':
-			result = append(result, SPACE)
+			result = append(result, Token{Kind: SPACE, Value: " "})
 		case '=':
-			result = append(result, EQUAL)
+			result = append(result, Token{Kind: EQUAL, Value: "="})
 		}
 		pos++
 	}
