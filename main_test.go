@@ -332,3 +332,82 @@ func TestParse_FunctionDeclaration_WithReturnArrow(t *testing.T) {
 		t.Errorf("Expected Body[0].Value %q, got %q", "x", node.Body[0].Value)
 	}
 }
+
+// Lexer: print@name のトークン化
+func TestAnalyze_PrintStatement(t *testing.T) {
+	input := "print@name"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: PRINT, Value: "print"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "name"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d: %v", len(expected), len(tokens), tokens)
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}
+
+// Parser: print@name のパース
+func TestParse_PrintStatement(t *testing.T) {
+	tokens := []Token{
+		{Kind: PRINT, Value: "print"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "name"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_PRINT {
+		t.Errorf("Expected Kind %q, got %q", NODE_PRINT, node.Kind)
+	}
+
+	if node.Value != "name" {
+		t.Errorf("Expected Value %q, got %q", "name", node.Value)
+	}
+}
+
+// Lexer: 変数宣言 + print の複合
+func TestAnalyze_VariableAndPrint(t *testing.T) {
+	input := ":: name > 'mero'\nprint@name"
+	tokens := analyze(input)
+
+	expected := []Token{
+		{Kind: DOUBLE_COLON, Value: "::"},
+		{Kind: IDENTIFIER, Value: "name"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: STRING, Value: "mero"},
+		{Kind: PRINT, Value: "print"},
+		{Kind: AT, Value: "@"},
+		{Kind: IDENTIFIER, Value: "name"},
+	}
+
+	if len(tokens) != len(expected) {
+		t.Fatalf("Expected %d tokens, got %d: %v", len(expected), len(tokens), tokens)
+	}
+
+	for i, tok := range tokens {
+		if tok.Kind != expected[i].Kind {
+			t.Errorf("Token %d: expected Kind %d, got %d", i, expected[i].Kind, tok.Kind)
+		}
+		if tok.Value != expected[i].Value {
+			t.Errorf("Token %d: expected Value %q, got %q", i, expected[i].Value, tok.Value)
+		}
+	}
+}

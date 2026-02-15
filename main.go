@@ -119,6 +119,8 @@ func analyze(tokens string) []Token {
 		case ' ':
 		case '=':
 			result = append(result, Token{Kind: EQUAL, Value: "="})
+		case '@':
+			result = append(result, Token{Kind: AT, Value: "@"})
 		default:
 			if char == '\'' {
 				// 開始の'をスキップ
@@ -141,7 +143,7 @@ func analyze(tokens string) []Token {
 			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
 				start := pos
 
-				for pos < inputLen && tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z' {
+				for pos < inputLen && (tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z') {
 					pos++
 				}
 
@@ -271,7 +273,7 @@ func eval(nodes []Node, env map[string]string) {
 				return
 			}
 
-			fmt.Print(val)
+			fmt.Println(val)
 		}
 	}
 }
