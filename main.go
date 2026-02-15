@@ -89,6 +89,18 @@ func analyze(tokens string) {
 			result = append(result, Token{Kind: SPACE, Value: " "})
 		case '=':
 			result = append(result, Token{Kind: EQUAL, Value: "="})
+		default:
+			if char >= '0' && char <= '9' {
+				start := pos
+
+				for pos < inputLen && tokens[pos] >= '0' && tokens[pos] <= '9' {
+					pos++
+				}
+				result = append(result, Token{Kind: NUMBER, Value: tokens[start:pos]})
+
+				// 最後のループ分進んでいるので戻す
+				pos--
+			}
 		}
 		pos++
 	}
