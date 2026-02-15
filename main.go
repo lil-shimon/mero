@@ -93,13 +93,10 @@ func analyze(tokens string) {
 			if char == '\'' {
 				start := pos
 
-				for pos < inputLen && tokens[pos] == '\'' {
+				for pos < inputLen && tokens[pos] != '\'' {
 					pos++
 				}
 				result = append(result, Token{Kind: STRING, Value: tokens[start:pos]})
-
-				// 最後のループ分進んでいるので戻す
-				pos--
 			} else if char >= '0' && char <= '9' {
 				start := pos
 
@@ -107,6 +104,7 @@ func analyze(tokens string) {
 					pos++
 				}
 				result = append(result, Token{Kind: NUMBER, Value: tokens[start:pos]})
+				// 最後のループ分進んでいるので戻す
 				pos--
 			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
 				start := pos
