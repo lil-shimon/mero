@@ -418,11 +418,11 @@ func TestEval_VariableDeclaration(t *testing.T) {
 	nodes := []Node{
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "name", Value: "mero"},
 	}
-	env := map[string]string{}
+	env := map[string]interface{}{}
 	eval(nodes, env)
 
 	if env["name"] != "mero" {
-		t.Errorf("Expected env[\"name\"] = %q, got %q", "mero", env["name"])
+		t.Errorf("Expected env[\"name\"] = %q, got %v", "mero", env["name"])
 	}
 }
 
@@ -431,14 +431,14 @@ func TestEval_MultipleVariables(t *testing.T) {
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "a", Value: "hello"},
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "b", Value: "world"},
 	}
-	env := map[string]string{}
+	env := map[string]interface{}{}
 	eval(nodes, env)
 
 	if env["a"] != "hello" {
-		t.Errorf("Expected env[\"a\"] = %q, got %q", "hello", env["a"])
+		t.Errorf("Expected env[\"a\"] = %q, got %v", "hello", env["a"])
 	}
 	if env["b"] != "world" {
-		t.Errorf("Expected env[\"b\"] = %q, got %q", "world", env["b"])
+		t.Errorf("Expected env[\"b\"] = %q, got %v", "world", env["b"])
 	}
 }
 

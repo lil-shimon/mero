@@ -64,7 +64,7 @@ func main() {
 	tokens := analyze(inputs)
 	nodes := parse(tokens)
 
-	env := map[string]string{}
+	env := map[string]interface{}{}
 
 	eval(nodes, env)
 }
@@ -268,7 +268,7 @@ func parseParams(tokens []Token, pos *int) []Node {
 
 // Evaluate
 
-func eval(nodes []Node, env map[string]string) {
+func eval(nodes []Node, env map[string]interface{}) {
 	for _, node := range nodes {
 		switch node.Kind {
 		case NODE_VARIABLE_DECLARATION:
@@ -280,7 +280,7 @@ func eval(nodes []Node, env map[string]string) {
 				return
 			}
 
-			fmt.Println(val)
+			fmt.Println(val.(string))
 		}
 	}
 }
