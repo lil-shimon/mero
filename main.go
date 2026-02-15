@@ -177,7 +177,7 @@ func parse(tokens []Token) []Node {
 			kind := tokens[pos].Kind
 			if kind == IDENTIFIER {
 				params := parseParams(tokens, &pos)
-				result = append(result, Node{Params: params, Name: name})
+				result = append(result, Node{Kind: NODE_FUNCTION_DECLARATION, Params: params, Name: name})
 			} else if kind == RETURN_ARROW {
 				// TODO:
 			}
@@ -193,14 +193,14 @@ func parse(tokens []Token) []Node {
 func parseParams(tokens []Token, pos *int) []Node {
 	var params []Node
 
-	for tokens[*pos].Kind != ARROW  {
+	for tokens[*pos].Kind != ARROW {
 		paramName := tokens[*pos].Value
-		*pos = *pos+1 // COLON
-		*pos = *pos+1 // TYPE
+		*pos = *pos + 1 // COLON
+		*pos = *pos + 1 // TYPE
 		paramType := tokens[*pos].Value
 		params = append(params, Node{Name: paramName, Value: paramType})
 
-		*pos = *pos+1
+		*pos = *pos + 1
 
 		if tokens[*pos].Kind == COMMA {
 			*pos = *pos + 1 // SKIP COMMA
