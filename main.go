@@ -137,6 +137,16 @@ type Node struct {
 	Body []Node
 }
 
-func parse (tokens []Token) {
+const (
+	NODE_VARIABLE_DECLAZRATION = "VariableDeclaration"
+)
 
+func parse (tokens []Token) {
+	var result []Node
+	for _, token := range tokens {
+		switch token.Kind {
+		case DOUBLE_COLON:
+				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: "::"})
+		}
+	}
 }
