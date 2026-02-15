@@ -418,7 +418,7 @@ func TestEval_VariableDeclaration(t *testing.T) {
 	nodes := []Node{
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "name", Value: "mero"},
 	}
-	env := map[string]interface{}{}
+	env := map[string]any{}
 	eval(nodes, env)
 
 	if env["name"] != "mero" {
@@ -431,7 +431,7 @@ func TestEval_MultipleVariables(t *testing.T) {
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "a", Value: "hello"},
 		{Kind: NODE_VARIABLE_DECLARATION, Name: "b", Value: "world"},
 	}
-	env := map[string]interface{}{}
+	env := map[string]any{}
 	eval(nodes, env)
 
 	if env["a"] != "hello" {
