@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"golang.org/x/text/cases"
 )
 
 const (
@@ -265,6 +267,14 @@ func eval(nodes []Node, env map[string]string) {
 		switch node.Kind {
 		case NODE_VARIABLE_DECLARATION:
 			env[node.Name] = node.Value
+		case NODE_PRINT:
+			val, ok := env[node.Value]
+		if !ok {
+				fmt.Printf("Error: undefined variable '%s'\n", node.Value)
+				return
+			}
+
+		fmt.Print(val)
 		}
 	}
 }
