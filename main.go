@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	"golang.org/x/text/cases"
 )
 
 const (
