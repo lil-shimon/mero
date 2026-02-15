@@ -143,10 +143,15 @@ const (
 
 func parse (tokens []Token) {
 	var result []Node
-	for _, token := range tokens {
+	pos := 0
+
+	for pos < len(tokens) {
+		token := tokens[pos]
 		switch token.Kind {
 		case DOUBLE_COLON:
 				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: "::"})
 		}
+
+		pos++
 	}
 }
