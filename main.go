@@ -88,7 +88,6 @@ func analyze(tokens string) []Token {
 		case '}':
 			result = append(result, Token{Kind: RBRACE, Value: "}"})
 		case ' ':
-			result = append(result, Token{Kind: SPACE, Value: " "})
 		case '=':
 			result = append(result, Token{Kind: EQUAL, Value: "="})
 		default:
@@ -149,12 +148,9 @@ func parse (tokens []Token) []Node {
 		token := tokens[pos]
 		switch token.Kind {
 		case DOUBLE_COLON:
-				pos++ // SPACE
 				pos++ // IDENTIFIER
 			  name := tokens[pos].Value
-				pos++ // SPACE
 				pos++ // ARROW 
-				pos++ // SPACE
 				pos++ // STRING or NUMBER 
 				value := tokens[pos].Value
 				result = append(result, Node{Kind: NODE_VARIABLE_DECLAZRATION, Name: name, Value: value})
@@ -163,5 +159,6 @@ func parse (tokens []Token) []Node {
 		pos++
 	}
 
+	fmt.Println("parse result", result)
 	return result
 }
