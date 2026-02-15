@@ -192,12 +192,20 @@ func parse(tokens []Token) []Node {
 
 func parseParams(tokens []Token, pos *int) []Node {
 	var params []Node
-	param_name := tokens[*pos].Value
-	*pos++ // COLON
-	*pos++
-	param_type := tokens[*pos].Value
-	params = append(params, Node{Name: param_name, Value: param_type})
+
+	for tokens[*pos].Kind != ARROW  {
+		paramName := tokens[*pos].Value
+		*pos = *pos+1 // COLON
+		*pos = *pos+1 // TYPE
+		paramType := tokens[*pos].Value
+		params = append(params, Node{Name: paramName, Value: paramType})
+
+		*pos = *pos+1
+
+		if tokens[*pos].Kind == COMMA {
+			*pos = *pos + 1 // SKIP COMMA
+		}
+	}
 
 	return params
-
 }
