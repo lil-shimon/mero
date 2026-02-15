@@ -35,11 +35,12 @@ type Token struct {
 
 func main() {
 	inputs := ":: name > 'mero'"
-	analyze(inputs)
+	tokens := analyze(inputs)
+	parse(tokens)
 }
 
 // Lexer
-func analyze(tokens string) {
+func analyze(tokens string) []Token {
 	inputLen := len(tokens)
 	pos := 0
 	var result []Token
@@ -122,4 +123,20 @@ func analyze(tokens string) {
 		pos++
 	}
 	fmt.Println(result)
+	return result
+}
+
+// Parser
+
+// AST Node
+type Node struct {
+	Kind string
+	Name string
+	Value string
+	Params []Node
+	Body []Node
+}
+
+func parse (tokens []Token) {
+
 }
