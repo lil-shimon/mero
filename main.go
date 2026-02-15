@@ -41,7 +41,8 @@ type Token struct {
 // TODO: IDENTIFIERの場合、なんなのかを識別するロジック(e.g. if, type)
 
 var keywords = map[string]int{
-	"fn": FN,
+	"fn":    FN,
+	"print": PRINT,
 }
 
 func main() {
