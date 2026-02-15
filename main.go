@@ -120,4 +120,5 @@ func analyze(tokens string) {
 		}
 		pos++
 	}
+	fmt.Println(result)
 }
