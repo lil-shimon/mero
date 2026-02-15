@@ -182,3 +182,141 @@ func TestParse_VariableDeclaration(t *testing.T) {
 		t.Errorf("Expected Value %q, got %q", "mero", node.Value)
 	}
 }
+
+func TestParse_FunctionDeclaration_SingleParam(t *testing.T) {
+	tokens := []Token{
+		{Kind: FN, Value: "fn"},
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: IDENTIFIER, Value: "x"},
+		{Kind: COLON, Value: ":"},
+		{Kind: IDENTIFIER, Value: "number"},
+		{Kind: ARROW, Value: ">"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_FUNCTION_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_FUNCTION_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "sum" {
+		t.Errorf("Expected Name %q, got %q", "sum", node.Name)
+	}
+
+	if len(node.Params) != 1 {
+		t.Fatalf("Expected 1 parameter, got %d", len(node.Params))
+	}
+
+	if node.Params[0].Name != "x" {
+		t.Errorf("Expected Param[0].Name %q, got %q", "x", node.Params[0].Name)
+	}
+
+	if node.Params[0].Value != "number" {
+		t.Errorf("Expected Param[0].Value %q, got %q", "number", node.Params[0].Value)
+	}
+}
+
+func TestParse_FunctionDeclaration_MultipleParams(t *testing.T) {
+	tokens := []Token{
+		{Kind: FN, Value: "fn"},
+		{Kind: IDENTIFIER, Value: "sum"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: IDENTIFIER, Value: "x"},
+		{Kind: COLON, Value: ":"},
+		{Kind: IDENTIFIER, Value: "number"},
+		{Kind: COMMA, Value: ","},
+		{Kind: IDENTIFIER, Value: "y"},
+		{Kind: COLON, Value: ":"},
+		{Kind: IDENTIFIER, Value: "number"},
+		{Kind: ARROW, Value: ">"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_FUNCTION_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_FUNCTION_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "sum" {
+		t.Errorf("Expected Name %q, got %q", "sum", node.Name)
+	}
+
+	if len(node.Params) != 2 {
+		t.Fatalf("Expected 2 parameters, got %d", len(node.Params))
+	}
+
+	if node.Params[0].Name != "x" {
+		t.Errorf("Expected Param[0].Name %q, got %q", "x", node.Params[0].Name)
+	}
+
+	if node.Params[0].Value != "number" {
+		t.Errorf("Expected Param[0].Value %q, got %q", "number", node.Params[0].Value)
+	}
+
+	if node.Params[1].Name != "y" {
+		t.Errorf("Expected Param[1].Name %q, got %q", "y", node.Params[1].Name)
+	}
+
+	if node.Params[1].Value != "number" {
+		t.Errorf("Expected Param[1].Value %q, got %q", "number", node.Params[1].Value)
+	}
+}
+
+func TestParse_FunctionDeclaration_WithReturnArrow(t *testing.T) {
+	tokens := []Token{
+		{Kind: FN, Value: "fn"},
+		{Kind: IDENTIFIER, Value: "double"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: IDENTIFIER, Value: "x"},
+		{Kind: COLON, Value: ":"},
+		{Kind: IDENTIFIER, Value: "number"},
+		{Kind: ARROW, Value: ">"},
+		{Kind: RETURN_ARROW, Value: "->"},
+		{Kind: IDENTIFIER, Value: "x"},
+	}
+
+	nodes := parse(tokens)
+
+	if len(nodes) != 1 {
+		t.Fatalf("Expected 1 node, got %d", len(nodes))
+	}
+
+	node := nodes[0]
+
+	if node.Kind != NODE_FUNCTION_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_FUNCTION_DECLARATION, node.Kind)
+	}
+
+	if node.Name != "double" {
+		t.Errorf("Expected Name %q, got %q", "double", node.Name)
+	}
+
+	if len(node.Params) != 1 {
+		t.Fatalf("Expected 1 parameter, got %d", len(node.Params))
+	}
+
+	if node.Params[0].Name != "x" {
+		t.Errorf("Expected Param[0].Name %q, got %q", "x", node.Params[0].Name)
+	}
+
+	if node.Params[0].Value != "number" {
+		t.Errorf("Expected Param[0].Value %q, got %q", "number", node.Params[0].Value)
+	}
+
+	if len(node.Body) < 1 {
+		t.Errorf("Expected Body to have at least 1 node, got %d", len(node.Body))
+	}
+}
