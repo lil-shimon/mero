@@ -123,7 +123,7 @@ func analyze(tokens string) []Token {
 				result = append(result, Token{Kind: DOUBLE_EQUAL, Value: "=="})
 				pos++
 			} else {
-			result = append(result, Token{Kind: EQUAL, Value: "="})
+				result = append(result, Token{Kind: EQUAL, Value: "="})
 			}
 		case '@':
 			result = append(result, Token{Kind: AT, Value: "@"})
@@ -185,7 +185,7 @@ const (
 	NODE_FUNCTION_DECLARATION = "FunctionDeclaration"
 	NODE_RETURN_STATEMENT     = "ReturnStatement"
 	NODE_PRINT                = "Print"
-	NODE_FUNCTION_CALL = "FunctionCall"
+	NODE_FUNCTION_CALL        = "FunctionCall"
 )
 
 func parse(tokens []Token) []Node {
@@ -239,6 +239,28 @@ func parse(tokens []Token) []Node {
 			pos++ // IDENTIFIER
 			value := tokens[pos].Value
 			result = append(result, Node{Kind: NODE_PRINT, Value: value})
+		case IDENTIFIER:
+			if pos+1 < len(tokens) && tokens[pos+1].Kind == AT {
+				name := tokens[pos].Value
+				var args []Node
+				pos++ // skip AT
+				pos++ // first param
+
+				for pos < len(tokens) {
+					args = append(args, Node{Value: tokens[pos].Value})
+					pos++
+
+					if pos < len(tokens) && tokens[pos].Kind == COMMA {
+						pos++ // skip COMMA
+					} else {
+						break
+					}
+				}
+
+				pos-- // revert last loop pos++
+
+				result = append(result, Node{Kind: NODE_FUNCTION_CALL, Name: name, Params: args})
+			}
 		}
 
 		pos++
