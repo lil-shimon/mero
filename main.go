@@ -143,7 +143,7 @@ func analyze(tokens string) []Token {
 			} else if char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z' {
 				start := pos
 
-				for pos < inputLen && (tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z') {
+				for pos < inputLen && (tokens[pos] >= 'a' && tokens[pos] <= 'z' || tokens[pos] >= 'A' && tokens[pos] <= 'Z' || tokens[pos] == '_') {
 					pos++
 				}
 
