@@ -1,2 +1,6 @@
 :: name > 'mero'
 print@name
+fn get_name > name : string >
+  -> name
+>
+get_name@name

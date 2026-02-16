@@ -304,6 +304,25 @@ func eval(nodes []Node, env map[string]any) {
 			}
 
 			fmt.Println(val.(string))
+		case NODE_FUNCTION_DECLARATION:
+			env[node.Name] = node
+		case NODE_FUNCTION_CALL:
+			fn := env[node.Name].(Node)
+
+			for i, param := range fn.Params {
+				env[param.Name] = node.Params[i].Value
+			}
+
+			for _, body := range fn.Body {
+				if body.Kind == NODE_RETURN_STATEMENT {
+					val, ok := env[body.Value]
+					if ok {
+						env["_return"] = val
+					} else {
+						env["_return"] = body.Value
+					}
+				}
+			}
 		}
 	}
 }
