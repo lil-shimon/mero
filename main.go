@@ -200,8 +200,7 @@ func parse(tokens []Token) []Node {
 			name := tokens[pos].Value
 			pos++ // ARROW
 			pos++ // STRING or NUMBER or IDENTIFIER (function name)
-			if tokens[pos+1].Kind == AT {
-				// TODO
+			if pos+1 < len(tokens) && tokens[pos+1].Kind == AT {
 				funcName := tokens[pos].Value
 				pos++ // AT
 				var args []Node
