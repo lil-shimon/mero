@@ -203,7 +203,7 @@ func parse(tokens []Token) []Node {
 			if pos+1 < len(tokens) && tokens[pos+1].Kind == AT {
 				funcName := tokens[pos].Value
 				pos++ // AT
-				pos++ // first args
+				pos++ // first arg
 				var args []Node
 
 				for pos < len(tokens) {
