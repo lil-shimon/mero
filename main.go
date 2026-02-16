@@ -219,7 +219,7 @@ func parse(tokens []Token) []Node {
 
 				pos--
 
-				result = append(result, Node{ Kind: NODE_FUNCTION_CALL, Name: name, Value: funcName, Params: args })
+				result = append(result, Node{ Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: funcName, Params: args })
 			} else {
 				value := tokens[pos].Value
 				result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
