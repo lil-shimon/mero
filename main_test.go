@@ -602,3 +602,93 @@ func TestParse_VariableWithFunctionCall(t *testing.T) {
 		t.Errorf("Expected Name %q, got %q", "result", node.Name)
 	}
 }
+
+// Evaluator: 関数定義が env に保存される
+func TestEval_FunctionDeclaration(t *testing.T) {
+	nodes := []Node{
+		{
+			Kind: NODE_FUNCTION_DECLARATION,
+			Name: "greet",
+			Params: []Node{
+				{Name: "name", Value: "string"},
+			},
+			Body: []Node{
+				{Kind: NODE_RETURN_STATEMENT, Value: "name"},
+			},
+		},
+	}
+	env := map[string]any{}
+	eval(nodes, env)
+
+	fn, ok := env["greet"]
+	if !ok {
+		t.Fatal("Expected function 'greet' in env")
+	}
+
+	fnNode, ok := fn.(Node)
+	if !ok {
+		t.Fatal("Expected env['greet'] to be a Node")
+	}
+
+	if fnNode.Kind != NODE_FUNCTION_DECLARATION {
+		t.Errorf("Expected Kind %q, got %q", NODE_FUNCTION_DECLARATION, fnNode.Kind)
+	}
+}
+
+// Evaluator: 関数呼び出しで引数がセットされる
+func TestEval_FunctionCall(t *testing.T) {
+	nodes := []Node{
+		{
+			Kind: NODE_FUNCTION_DECLARATION,
+			Name: "greet",
+			Params: []Node{
+				{Name: "name", Value: "string"},
+			},
+			Body: []Node{
+				{Kind: NODE_RETURN_STATEMENT, Value: "name"},
+			},
+		},
+		{
+			Kind: NODE_FUNCTION_CALL,
+			Name: "greet",
+			Params: []Node{
+				{Value: "mero"},
+			},
+		},
+	}
+	env := map[string]any{}
+	eval(nodes, env)
+
+	// 引数が env にセットされている
+	if env["name"] != "mero" {
+		t.Errorf("Expected env[\"name\"] = %q, got %v", "mero", env["name"])
+	}
+
+	// 戻り値が _return に入っている
+	ret, ok := env["_return"]
+	if !ok {
+		t.Fatal("Expected _return in env")
+	}
+
+	if ret != "mero" {
+		t.Errorf("Expected _return = %q, got %v", "mero", ret)
+	}
+}
+
+// Evaluator: 変数宣言 + print の統合テスト
+func TestEval_VariableAndPrint(t *testing.T) {
+	nodes := []Node{
+		{Kind: NODE_VARIABLE_DECLARATION, Name: "name", Value: "mero"},
+		{Kind: NODE_VARIABLE_DECLARATION, Name: "age", Value: "27"},
+	}
+	env := map[string]any{}
+	eval(nodes, env)
+
+	if env["name"] != "mero" {
+		t.Errorf("Expected env[\"name\"] = %q, got %v", "mero", env["name"])
+	}
+
+	if env["age"] != "27" {
+		t.Errorf("Expected env[\"age\"] = %q, got %v", "27", env["age"])
+	}
+}
