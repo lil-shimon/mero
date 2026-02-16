@@ -199,9 +199,13 @@ func parse(tokens []Token) []Node {
 			pos++ // IDENTIFIER
 			name := tokens[pos].Value
 			pos++ // ARROW
-			pos++ // STRING or NUMBER
-			value := tokens[pos].Value
-			result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
+			pos++ // STRING or NUMBER or AT (when funcion call)
+			if tokens[pos].Kind == AT {
+				// TODO
+			} else {
+				value := tokens[pos].Value
+				result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
+			}
 		case FN:
 			pos++ // IDENTIFIER
 			name := tokens[pos].Value
