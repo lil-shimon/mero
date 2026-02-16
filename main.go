@@ -199,8 +199,8 @@ func parse(tokens []Token) []Node {
 			pos++ // IDENTIFIER
 			name := tokens[pos].Value
 			pos++ // ARROW
-			pos++ // STRING or NUMBER or AT (when funcion call)
-			if tokens[pos].Kind == AT {
+			pos++ // STRING or NUMBER or IDENTIFIER (function name)
+			if tokens[pos+1].Kind == AT {
 				// TODO
 			} else {
 				value := tokens[pos].Value
