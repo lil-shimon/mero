@@ -202,6 +202,24 @@ func parse(tokens []Token) []Node {
 			pos++ // STRING or NUMBER or IDENTIFIER (function name)
 			if tokens[pos+1].Kind == AT {
 				// TODO
+				funcName := tokens[pos].Value
+				pos++ // AT
+				var args []Node
+
+				for pos < len(tokens) {
+					args = append(args, Node{Value: tokens[pos].Value})
+					pos++
+
+					if(pos < len(tokens) && tokens[pos].Kind == COMMA) {
+						pos++ // skip comma
+					} else {
+						break
+					}
+				}
+
+				pos--
+
+				result = append(result, Node{ Kind: NODE_FUNCTION_CALL, Name: name, Value: funcName, Params: args })
 			} else {
 				value := tokens[pos].Value
 				result = append(result, Node{Kind: NODE_VARIABLE_DECLARATION, Name: name, Value: value})
