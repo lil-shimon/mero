@@ -1,8 +1,10 @@
 :: name > 'mero'
 print@name
-fn get_name > name : string >
+fn get_msg > name : string >
   -> name
 >
-:: result > get_name@name
+
+:: msg > 'hello world'
+:: result > get_msg@msg
 print@result
 
