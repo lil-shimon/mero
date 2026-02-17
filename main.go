@@ -316,8 +316,6 @@ func parseParams(tokens []Token, pos *int) []Node {
 func eval(nodes []Node, env map[string]any) {
 	for _, node := range nodes {
 		switch node.Kind {
-		// TODO: :: result > get_name@name のように関数呼び出しを実行すると、`get_name`がresultに入る。
-		// get_nameのreturn valueがresultに入っているべき。
 		case NODE_VARIABLE_DECLARATION:
 			if node.Params != nil {
 				// function in node.Value
